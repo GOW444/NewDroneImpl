@@ -5,6 +5,10 @@ DroneManager::DroneManager(){
     this->drone_count=0;
 }
 
+int DroneManager::getDrone_Count(){
+    return drone_count;
+}
+
 void DroneManager::process_command(string cmd){
     //array to break and store the individual words/integers(for coordinates)
     string subcmds[5];
@@ -75,6 +79,7 @@ void DroneManager::create_drone(string id,Location l=Location()){
     if(id.length()!=12) return;
     Drone new_drone = Drone(id, l);
 
+
     (this->drone_count)++;
     cout<<"CREATE_DRONE "<<id<<" DONE\n";
 }
@@ -95,8 +100,55 @@ void DroneManager::delete_drone(string id){
 }
 
 void DroneManager::move(string id,Location l){
-    
+    if(id.length()!=12) return;
+    int x=l.getX();
+    int y=l.getY();
+    int z=l.getZ();
 
+    Location locations[]={Location("",x+1,y,z),Location("",x,y+1,z),Location("",x,y,z+1),Location("",x-1,y,z),Location("",x,y-1,z),Location("",x,y,z-1)};
+
+    bool available=true;//if location l is available
+    for(int i=0;i<MAX_DRONES;i++){
+        if(drones[i].getLocation().getX()==x && drones[i].getLocation().getY()==y && drones[i].getLocation().getZ()==z ){
+            available=false;
+            break; //conflict with location
+        }
+    }
+
+    if(available){
+        for(int i=0;i<MAX_DRONES;i++){
+            if(drones[i].hasID(id)){
+                bool moved=drones[i].move(l);
+                if(moved) cout<<true;
+                else cout<<false;
+                return;
+            }
+        }
+    }
+
+    for(auto l:locations){
+        x=l.getX();
+        y=l.getY();
+        z=l.getZ();
+        bool check=true;
+        for(int i=0;i<MAX_DRONES;i++){
+            if(drones[i].getLocation().getX()==x && drones[i].getLocation().getY()==y && drones[i].getLocation().getZ()==z ){
+                check=false;
+                break; //conflict with location
+            }
+        }
+            if(check){
+                for(int i=0;i<MAX_DRONES;i++){
+                    if(drones[i].hasID(id)){
+                        bool moved=drones[i].move(l);
+                        if(moved) cout<<true;
+                        else cout<<false;
+                    return;
+                    }
+                }    
+            }
+    }
+    
 }
 
 void DroneManager::recharge(string id){
