@@ -1,31 +1,41 @@
-#ifndef DRONEMANAGER_H
-#define DRONEMANAGER_H
+#ifndef DRONE_H
+#define DRONE_H
 
-#include<iostream>
-#include"drone.h"
-#define MAX_DRONES 10
-
+#include <iostream>
+#include <string>
+#include "location.h"
 using namespace std;
 
-class DroneManager{
-    private:
+class Drone {
+private:
+    // add attributes
+    string ID;
+    int battery;
+    Location currentLoc;
+    Location lastLoc;
+    Location baseLoc;
+    static const int MAX_BATTERY = 100;
 
-    Drone drones[MAX_DRONES];//array of drones
-    int drone_count;
+    int getDistance(const Location& loc);
+    void discharge(int distance);
 
-    public:
+public:
+    // Constructors
+    Drone();
+    Drone(const string& id, const Location& startLoc);
 
-    DroneManager();
-    void process_command(string cmd);
-    void create_drone(string id,Location l=Location());
-    void delete_drone(string id);//check for drone count in main //break out if count==0
-    void move(string id,Location l);
-    void recharge(string id);
-    void show_loc(string id);
-    void show_last_loc(string id);
-    void show_battery(string id);
-    void come_2_base(string id);
-
+    void setID(const string& id);
+    void showLoc() const;
+    void showLastLoc() const;
+    void showBattery() const;
+    void recharge();
+    bool hasID(const string &checkID) const;
+    void printID() const;
+    
+    // Move to Location
+    bool move(const Location& loc);
+    bool comeToBase();
+    Location getLocation();
 };
 
 #endif
