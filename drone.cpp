@@ -92,3 +92,7 @@ bool Drone::comeToBase() {
     // do not cout
     return this->move(this->baseLoc); // return true if move was successful, otherwise return false
 }
+
+Location Drone::getLocation(){
+    return this->currentLoc;
+}
