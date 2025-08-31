@@ -35,6 +35,7 @@ public:
     // Move to Location
     bool move(const Location& loc);
     bool comeToBase();
+    Location getLocation();
 };
 
 #endif
